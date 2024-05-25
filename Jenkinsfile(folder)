@@ -4,9 +4,6 @@ pipeline {
     environment {
         NODEJS_HOME = tool name: 'v20.11.1' // Name must match the NodeJS configuration in Jenkins
         PATH = "${NODEJS_HOME}/bin:${env.PATH}"
-        IMAGE_NAME = 'sample-react-app'
-        IMAGE_TAG = "${env.BUILD_NUMBER}"
-        SAVE_PATH = 'D:\\Jenkins\\React\\docker-images' // Update this to your desired save path
     }
 
     stages {
@@ -37,19 +34,14 @@ pipeline {
                 bat 'npm test'
             }
         }
-         stage('Package') {
+        stage('Deploy') {
             steps {
                 script {
-                    docker.build("${env.IMAGE_NAME}:${env.IMAGE_TAG}")
-                }
-            }
-        }
-        stage('Save Image') {
-            steps {
-                script {
-                    def imageTar = "${env.WORKSPACE}\\${env.IMAGE_NAME}_${env.IMAGE_TAG}.tar"
-                    bat "docker save -o ${imageTar} ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
-                    bat "move ${imageTar} ${env.SAVE_PATH}"
+                    def sourcePath = "${env.WORKSPACE}\\build" // Path to the build output directory
+                    def destinationPath = "D:\\Jenkins\\React\\builds" // Target directory for deployment
+
+                    echo "Copying files from ${sourcePath} to ${destinationPath}"
+                    bat "xcopy /s /e /y ${sourcePath}\\* ${destinationPath}\\"
                 }
             }
         }
