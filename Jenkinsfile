@@ -16,19 +16,22 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 // Install Node.js dependencies
-                sh 'npm install'
+                //sh 'npm install'
+                bat 'npm install'
             }
         }
         stage('Build') {
             steps {
                 // Build the React project
-                sh 'npm run build'
+                //sh 'npm run build'
+                bat 'npm run build'
             }
         }
         stage('Test') {
             steps {
                 // Run tests
-                sh 'npm test'
+                //sh 'npm test'
+                bat 'npm test'
             }
         }
         stage('Deploy') {
