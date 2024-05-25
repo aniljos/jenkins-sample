@@ -33,8 +33,13 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                // Deploy the application (add your deployment script here)
-                // Example: sh './deploy.sh'
+                script {
+                    def sourcePath = "${env.WORKSPACE}/build" // Path to the build output directory
+                    def destinationPath = "D:\\Jenkins\\React\\builds" // Target directory for deployment
+
+                    echo "Copying files from ${sourcePath} to ${destinationPath}"
+                    bat "xcopy /s /e /y ${sourcePath}\\* ${destinationPath}\\"
+                }
             }
         }
     }
